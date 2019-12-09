@@ -42,11 +42,8 @@
 <script>
 
     function subm() {
-        console.log("nimei")
         var name=document.getElementById("username").value;
         var pwd=document.getElementById("password").value;
-        console.log(name);
-        console.log(pwd);
         /*  var params = {
               "userName":name,
               "password":pwd,
@@ -60,7 +57,12 @@
                 console.log(result);
                 localStorage.setItem("username",name);
                 localStorage.setItem("pwd",pwd);
-                window.location = "main.html";
+                if (result.type==1){
+                    window.location = "main.html";
+                }else {
+                    window.location = "main1.html";
+                }
+
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest.responseText);

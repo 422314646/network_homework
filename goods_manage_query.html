@@ -67,21 +67,20 @@
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
                 {field:'id', width:'10%', title: '部门ID',id:'id'}
-                ,{field:'name', width:'10%', title: '部门名称'}
-                ,{field:'type', width:'10%', title: '部门类型', sort: true}
-                ,{field:'address', width:'10%', title: '部门地址'}
-                ,{field:'owner', title: '部门负责人', width:'10%'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                ,{field:'name', width:'11%', title: '部门名称'}
+                ,{field:'type', width:'11%', title: '部门类型', sort: true}
+                ,{field:'address', width:'11%', title: '部门地址'}
+                ,{field:'owner', title: '部门负责人', width:'11%'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
                 ,{field:'owner_contact', title: '负责人号码', width:'13%'}
                 ,{field:'admin', title: '网安管理员姓名', width:'10%'}
                 ,{field:'admin_contact', title: '网安管理员号码', width:'13%'}
-                ,{fixed: 'right', width:150, align:'center', toolbar: '#barDemo',width:'15%'}
+                ,{fixed: 'right', width:150, align:'center', toolbar: '#barDemo',width:'10%'}
             ]]
         });
     });
 
 </script>
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -117,14 +116,13 @@
 
                 });
             } else if(obj.event === 'edit'){
-                //layer.alert('编辑行：<br>'+ JSON.stringify(data))
                 localStorage.setItem("data",JSON.stringify(data));
                 layer.open({
                     type: 2,
                     skin: 'layui-layer-rim', //加上边框
-                    area: ['520px', '340px'], //宽高
+                    area: ['520px', '462px'], //宽高
                     content: 'goods_manage_update.html',
-                    title:"修改部门信息"
+                    title:" "
                     //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
 
 
@@ -139,9 +137,10 @@
        layer.open({
            type: 2,
            skin: 'layui-layer-rim', //加上边框
-           area: ['520px', '340px'], //宽高
+           //area: ['520px', '340px'], //宽高
+           area: ['520px', '425px'], //宽高
            content: 'goods_manage_add.html',
-           title:"添加信息"
+           title:" "
        });
    }
 

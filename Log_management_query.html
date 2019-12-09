@@ -22,14 +22,7 @@
 </head>
 <body>
 <table class="layui-hide" id="test" lay-filter="demo"></table>
-<div style="display: none;"id="userTool">
-    <div>
-        <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">注册管理员</button>
-        <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>
-    </div>
 
-
-</div>
 </body>
 
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
@@ -39,37 +32,35 @@
         var table = layui.table;
         table.render({
             elem: '#test'
-            ,url:'/user'
+            ,url:'/session/log'
             ,method:"GET"
             ,toolbar: "#userTool"
-            ,title: '用户数据表'
+            ,title: '日志数据表'
             ,page:true
-            ,limit:20
+            ,limit:10
             ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                 console.log(res)
                 return {
                     "code": 0, //解析接口状态
                     "msg": "正在加载", //解析提示文本
                     "count": res.count, //解析数据长度
-                    "data": res.users //解析数据列表
+                    "data": res.logs //解析数据列表
                 };
             }
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
-                {field:'account', width:'10%', title: '登录账号',id:'id'}
-                ,{field:'name', width:'11%', title: '名字'}
-                ,{field:'phone', width:'16%', title: '手机号码'}
-                ,{field:'email', width:'16%', title: '邮箱地址'}
-                ,{field:'wechat', title: '微信号', width:'15%'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
-                ,{field:'department_name', title: '部门名称', width:'11%'}
-                ,{field:'department_type', title: '部门类型', width:'11%'}
-                ,{fixed: 'right', width:150, align:'center', toolbar: '#barDemo',width:'10%'}
+                {field:'id', width:'10%', title: '编号',id:'id'}
+                ,{field:'user_account', width:'10%', title: '用户账号'}
+                ,{field:'user_name', width:'13%', title: '用户姓名'}
+                ,{field:'ip', width:'15%', title: '登陆IP'}
+                ,{field:'created', title: '登录时间', width:'20%'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
             ]]
         });
     });
 
 </script>
 <script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -110,7 +101,7 @@
                 layer.open({
                     type: 2,
                     skin: 'layui-layer-rim', //加上边框
-                    area: ['520px', '425px'], //宽高
+                    area: ['520px', '340px'], //宽高
                     content: 'form_manage_update.html',
                     title:"修改管理员信息"
                     //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
@@ -127,7 +118,7 @@
         layer.open({
             type: 2,
             skin: 'layui-layer-rim', //加上边框
-            area: ['520px', '425px'], //宽高
+            area: ['520px', '340px'], //宽高
             content: 'form_manage_add.html',
             title:"添加信息"
         });
