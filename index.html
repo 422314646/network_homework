@@ -29,9 +29,8 @@
           <div class="login_name">
                <p>应急避灾管理系统</p>
           </div>
-              <input name="username" id="username" type="text"  value="用户名" onfocus="this.value=''" onblur="if(this.value==''){this.value='用户名'}">
-              <span id="password_text" onclick="this.style.display='none';document.getElementById('password').style.display='block';document.getElementById('password').focus();" >密码</span>
-              <input name="password" type="password" id="password" style="display:none;" onblur="if(this.value==''){document.getElementById('password_text').style.display='block';this.style.display='none'};"/>
+              <input name="username"  type="text" id="username" placeholder="用户名">
+              <input name="password" type="password" id="password" placeholder = "密码"/>
               <input value="登录" style="width:100%;" type="button"  onclick="subm()">
       </div>
 
@@ -40,14 +39,24 @@
 </div>
 </body>
 <script>
+    console.log("main");
+    window.onload = function() {
+        console.log(document.cookie.length);
+        if (document.cookie.length == 0) {
+            return;
+        }
+        var nh = document.cookie.split(";")[0].split("=")[1];
+        console.log(nh);
+        if ('' != nh) {
+            console.log("logined...");
+            window.location.href = "main.html";
+        }
+    }
 
     function subm() {
+        console.log("login");
         var name=document.getElementById("username").value;
         var pwd=document.getElementById("password").value;
-        /*  var params = {
-              "userName":name,
-              "password":pwd,
-          };*/
         $.ajax({
             type : "POST",  //提交方式
             url : '/session',//路径
