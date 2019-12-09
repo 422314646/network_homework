@@ -35,6 +35,13 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
+    var departmentType = {};
+    departmentType['2'] = '市级单位';
+    departmentType['3'] = '市级各辖区单位';
+    departmentType['4'] = '受监管企业单位';
+    departmentType['5'] = '签约技术支持/安全服务单位';
+    console.log(departmentType);
+
     layui.use('table', function(){
         var table = layui.table;
         table.render({
@@ -62,7 +69,13 @@
                 ,{field:'email', width:'16%', title: '邮箱地址'}
                 ,{field:'wechat', title: '微信号', width:'15%'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
                 ,{field:'department_name', title: '部门名称', width:'11%'}
-                ,{field:'department_type', title: '部门类型', width:'11%'}
+                ,{field:'department_type', title: '部门类型', width:'11%'
+                    , templet:function(d) {
+                        if (departmentType.hasOwnProperty(d.department_type)) {
+                            return departmentType[d.department_type];
+                        }
+                        return "";
+                    }}
                 ,{fixed: 'right', width:150, align:'center', toolbar: '#barDemo',width:'10%'}
             ]]
         });

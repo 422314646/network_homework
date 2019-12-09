@@ -35,6 +35,13 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
+    var departmentType = {};
+    departmentType['2'] = '市级单位';
+    departmentType['3'] = '市级各辖区单位';
+    departmentType['4'] = '受监管企业单位';
+    departmentType['5'] = '签约技术支持/安全服务单位';
+    console.log(departmentType);
+
     layui.use('table', function(){
         var table = layui.table;
         var time=getDate();
@@ -55,6 +62,7 @@
             ,title: '部门数据表'
             ,page:true
             ,limit:20
+            ,loading:true
             ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                 console.log(res)
                 return {
@@ -66,9 +74,12 @@
             }
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
-                {field:'id', width:'10%', title: '部门ID',id:'id'}
+                {field:'id', width:'10%', title: '部门ID',id:'id', sort:true}
                 ,{field:'name', width:'11%', title: '部门名称'}
-                ,{field:'type', width:'11%', title: '部门类型', sort: true}
+                ,{field:'type', width:'11%', title: '部门类型', sort:true
+                    , templet:function(d) {
+                        return departmentType[d.type];
+                    }}
                 ,{field:'address', width:'11%', title: '部门地址'}
                 ,{field:'owner', title: '部门负责人', width:'11%'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
                 ,{field:'owner_contact', title: '负责人号码', width:'13%'}
