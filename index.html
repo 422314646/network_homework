@@ -42,15 +42,14 @@
 <script>
 
     function subm() {
-        console.log("nimei")
+        window.onload = function() {
+            if (document.cookie != null) {
+                window.location = "main.html"
+            }
+        }
+
         var name=document.getElementById("username").value;
         var pwd=document.getElementById("password").value;
-        console.log(name);
-        console.log(pwd);
-        /*  var params = {
-              "userName":name,
-              "password":pwd,
-          };*/
         $.ajax({
             type : "POST",  //提交方式
             url : '/session',//路径
