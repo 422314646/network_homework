@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<meta http-equiv="Pragma" content="no-cache"> 
+<meta http-equiv="Cache-Control" content="no-cache"> 
+<meta http-equiv="Expires" content="0"> 
+<title>应急避灾管理系统</title>
+<link href="./style/login.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+    <script type="text/javascript" src="./js/md5.js"></script>
+
+    <script type="text/javascript" src="./js/highcharts.js"></script>
+    <script type="text/javascript" src="./js/modules/exporting.js"></script>
+    <script type="text/javascript" src="./js/highcharts-3d.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.1.0/layer.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="./config/utils.js"></script>
+    <script type="text/javascript" src="./config/config.js"></script>
+</head>
+
+<body>
+<div class="login_box">
+      <div class="login_l_img"><img src="images/login-img.png" /></div>
+      <div class="login">
+          <div class="login_logo"><a href="#"><img src="images/login_logo.png" /></a></div>
+          <div class="login_name">
+               <p>应急避灾管理系统</p>
+          </div>
+              <input name="username" id="username" type="text"  value="用户名" onfocus="this.value=''" onblur="if(this.value==''){this.value='用户名'}">
+              <span id="password_text" onclick="this.style.display='none';document.getElementById('password').style.display='block';document.getElementById('password').focus();" >密码</span>
+              <input name="password" type="password" id="password" style="display:none;" onblur="if(this.value==''){document.getElementById('password_text').style.display='block';this.style.display='none'};"/>
+              <input value="登录" style="width:100%;" type="button"  onclick="subm()">
+      </div>
+
+</div>
+<div style="text-align:center;">
+</div>
+</body>
+<script>
+
+    function subm() {
+        console.log("nimei")
+        var name=document.getElementById("username").value;
+        var pwd=document.getElementById("password").value;
+        console.log(name);
+        console.log(pwd);
+        /*  var params = {
+              "userName":name,
+              "password":pwd,
+          };*/
+        $.ajax({
+            type : "POST",  //提交方式
+            url : '/session',//路径
+            data : JSON.stringify({'account':name,'password':pwd}),
+            dataType:"json",
+            success : function(result) {
+                console.log(result);
+                localStorage.setItem("username",name);
+                localStorage.setItem("pwd",pwd);
+                window.location = "main.html";
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+                var j = JSON.parse(XMLHttpRequest.responseText);
+                alert(j.error);
+            }
+        });
+    }
+
+</script>
+</html>

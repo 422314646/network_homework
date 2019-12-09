@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>添加事务</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="style/adminStyle.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/md5.js"></script>
+    <script type="text/javascript" src="./config/utils.js"></script>
+</head>
+<body>
+<div class="wrap" >
+    <div class="page-title">
+        <span class="modular fl"><i class="user"></i><em>添加事务</em></span>
+    </div>
+    <table class="noborder">
+        <!-- <tr>
+             <td style="text-align:right;">部门ID：</td>
+             <td><input type="text" class="textBox length-middle" id="id"/></td>
+         </tr>-->
+        <tr>
+            <td style="text-align:right;">事件类型：</td>
+            <td><input type="text" class="textBox length-middle" id="type"/></td>
+        </tr>
+        <tr>
+            <td style="text-align:right;">具体事件描述：</td>
+            <td><input type="text" class="textBox length-middle" id="detail" /></td>
+        </tr>
+        <tr>
+            <td style="text-align:right;">事务类型：</td>
+            <td><input type="text" class="textBox length-middle" id="tranType"></td>
+        </tr>
+        <tr>
+            <td style="text-align:right;">辖区：</td>
+            <td><input type="text" class="textBox length-middle" id="handler_department" /></td>
+        </tr>
+        <tr>
+            <td style="text-align:right;"></td>
+            <td><input type="button" class="tdBtn" value="保存"  onclick="buttonClick_search()"/></td>
+        </tr>
+    </table>
+</div>
+
+
+<script>
+    function buttonClick_search(){
+        var res = confirm("确认提交");
+        if(res == true){
+            var params = {
+                "type": parseInt(document.getElementById( "type").value),
+                "detail": document.getElementById( "detail").value,
+                "tranType": parseInt(document.getElementById("tranType").value),
+                "handler_department": parseInt(document.getElementById("handler_department").value),
+            };
+                $.ajax({
+                    type : "POST",  //提交方式
+                    url : "/transaction",//路径
+                    data: JSON.stringify(params),
+                    success : function(result) {
+                        console.log(result);
+                        alert("添加成功");
+
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        console.log(XMLHttpRequest.responseText);
+                        var j = JSON.parse(XMLHttpRequest.responseText);
+                        alert(j.error);
+                    }
+                });
+        }else{
+        }
+    }
+
+</script>
+</body>
+</html>

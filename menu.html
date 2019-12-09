@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>左侧导航</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="style/adminStyle.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/md5.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="./layui/layui.js"></script>
+
+</head>
+<body class="layui-layout-body" id="parent">
+
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">信息管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="goods_manage_query.html" title="部门信息查询" target="mainCont"  >部门信息</a></dd>
+                        <dd><a href="form_manage_query.html" title="用户信息管理" target="mainCont" >用户信息</a></dd>
+                        <dd><a href="device_manage_query.html" title="事务信息管理" target="mainCont" >事务信息</a></dd>
+                    </dl>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+
+
+</body>
+<script>
+    layui.use('element', function(){
+        var element = layui.element;
+
+    });
+    //获取界面传递过来的参数
+   /* var username=localStorage.getItem("username");
+    var pwd=localStorage.getItem("pwd");
+    getData();
+    function getData(){
+        var time=getDate();
+        var params = {
+            "userName":username,
+            "password":pwd,
+            "timeStamp":time,
+        };
+        var sig=setParamSign(jsonSort(params));
+        $.ajax({
+            type : "POST",  //提交方式
+            url : "http://ddns.cjoyin.top:32009/IOT/auth.php/Auth/getUserAuthByUsername",//路径
+            data : {
+                "userName":username,
+                "password":pwd,
+                "timeStamp":time,
+                "sign":sig,
+            },//数据，这里使用的是Json格式进行传输
+            success : function(result) {
+
+                if(result.status==10029){
+                        setList(result.data);
+                }else {
+                    alert("账号或者密码错误")
+                }
+            }
+        });
+    }
+    function setList(data) {
+        var parent = document.getElementById("parent");
+        for(i=0;i<data.length;i++){
+            switch (data[i].auth_class){
+                case "1":{
+                    var li = document.createElement("li");
+                    li.setAttribute("class", "menu-list-title");
+                    var span = document.createElement("span");
+                    span.innerHTML = "设备管理";
+                    var it = document.createElement("i");
+                    it.innerHTML = "◢";
+                    li.appendChild(span);
+                    li.appendChild(it);
+
+                    var li_out = document.createElement("li");
+                    var li_in = document.createElement("li");
+                    var ul = document.createElement("ul");
+                    var a = document.createElement("a");
+                    ul.setAttribute("class", "menu-children");
+                    a.setAttribute("href","device_manage");
+                    a.setAttribute("title","设备信息");
+                    a.setAttribute("target","mainCont");
+                    a.innerHTML="设备信息"
+                    li_in.appendChild(a);
+                    ul.appendChild(li_in)
+                    li_out.appendChild(ul)
+
+                    parent.appendChild(li);
+                    parent.appendChild(li_out);
+
+                }break;
+
+                case "2":{
+                    var li = document.createElement("li");
+                    li.setAttribute("class", "menu-list-title");
+                    var span = document.createElement("span");
+                    span.innerHTML = "报表管理";
+                    var it = document.createElement("i");
+                    it.innerHTML = "◢";
+                    li.appendChild(span);
+                    li.appendChild(it);
+
+                    var li_out = document.createElement("li");
+                    var li_in = document.createElement("li");
+                    var ul = document.createElement("ul");
+                    var a = document.createElement("a");
+                    ul.setAttribute("class", "menu-children");
+                    a.setAttribute("href","form_manage");
+                    a.setAttribute("title","报表信息");
+                    a.setAttribute("target","mainCont");
+                    a.innerHTML="报表信息"
+                    li_in.appendChild(a);
+                    ul.appendChild(li_in)
+                    li_out.appendChild(ul)
+
+                    parent.appendChild(li);
+                    parent.appendChild(li_out);
+
+                }break;
+
+                case "3":{
+                    var li = document.createElement("li");
+                    li.setAttribute("class", "menu-list-title");
+                    var span = document.createElement("span");
+                    span.innerHTML = "商品管理";
+                    var it = document.createElement("i");
+                    it.innerHTML = "◢";
+                    li.appendChild(span);
+                    li.appendChild(it);
+
+                    var li_out = document.createElement("li");
+                    var li_in = document.createElement("li");
+                    var ul = document.createElement("ul");
+                    var a = document.createElement("a");
+                    ul.setAttribute("class", "menu-children");
+                    a.setAttribute("href","goods_manage_query.html");
+                    a.setAttribute("title","商品信息");
+                    a.setAttribute("target","mainCont");
+                    a.innerHTML="商品信息"
+                    li_in.appendChild(a);
+                    ul.appendChild(li_in)
+                    li_out.appendChild(ul)
+
+                    parent.appendChild(li);
+                    parent.appendChild(li_out);
+
+                }break;
+                default: break;
+            }
+        }
+        $('.Interlaced tr:odd').addClass('trbgcolor');
+        //left menu toggle style
+        $('.menu-list-title').click(function(){
+            $(this).next('li').toggle('1500');
+        });
+        //menu current background color
+        $(".menu-children li").click(function(){
+            $(".menu-children li").css({background:'none'});
+            $(this).css({background:'#f35844'});
+        });
+    }
+    function setParamSign(params) {
+        if (params) {
+            var sign = md5(params);
+            if (typeof params == "string") {
+                params += ("&sign=" + sign);
+            }
+            else {
+                params["sign"] = sign;
+            }
+        }
+        return sign;
+    }
+    function jsonSort(jsonObj) {
+        var arr=[];
+        for(var key in jsonObj){
+            arr.push(key)
+        }
+        arr.sort();
+        var str='';
+        for(var i in arr){
+            str +=jsonObj[arr[i]]
+        }
+
+        return str
+    }
+    function getDate(){
+
+        var myDate = new Date();
+        //获取当前年
+        var year = myDate.getFullYear();
+        //获取当前月
+        var month = myDate.getMonth() + 1;
+        //获取当前日
+        var date = myDate.getDate();
+        var h = myDate.getHours(); //获取当前小时数(0-23)
+        var m = myDate.getMinutes(); //获取当前分钟数(0-59)
+        var s = myDate.getSeconds();
+        //获取当前时间
+        var now = year + '-' + conver(month) + "-" + conver(date) + " " + conver(h) + ':' + conver(m) + ":" + conver(s);
+        return now;
+    }
+    function conver(s) {
+        return s < 10 ? '0' + s : s;
+    }
+*/
+</script>
+</html>
+
+
+
