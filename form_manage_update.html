@@ -84,6 +84,7 @@
                 success : function(result) {
                     console.log(result);
                     alert("修改成功");
+                    parent.location.reload();
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(XMLHttpRequest.responseText);

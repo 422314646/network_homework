@@ -81,6 +81,7 @@
                 success : function(result) {
                     console.log(result);
                     alert("添加成功");
+                    parent.location.reload();
 
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {

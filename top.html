@@ -5,6 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script type="text/javascript" src="./js/jquery.js"></script>
     <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="MyCSS.css">
+    <script src="./layui/layui.js"></script>
+
 </head>
 <body>
 
@@ -13,7 +16,11 @@
   <div class="layui-logo">欢迎来到后台管理系统</div>
   <!-- 头部区域（可配合layui已有的水平导航） -->
   <ul class="layui-nav layui-layout-right">
-   <li class="layui-nav-item"><a href="javascript:void(0)" onclick="logout()">安全退出</a></li>
+      <li class="layui-nav-item">
+              <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+      </li>
+      <li class="layui-nav-item"><a href="#" id="name" style="margin-left:1px !important; padding-left:1px !important;"></a></li>
+      <li class="layui-nav-item"><a href="javascript:void(0)" onclick="logout()">安全退出</a></li>
   </ul>
  </div>
 </div>
@@ -42,5 +49,9 @@
             }
         })
     }
+</script>
+<script>
+    var username=localStorage.getItem("username");
+    $("#name").text("欢迎您："+username ).show();
 </script>
 </html>

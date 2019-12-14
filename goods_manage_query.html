@@ -66,7 +66,8 @@
             }
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
-                {field:'id', width:'10%', title: '部门ID',id:'id'}
+                {field:'seq', width:'6%', title: '编号', type: 'numbers'}
+                ,{field:'id', width:'10%', title: '部门ID',id:'id',hide:true}
                 ,{field:'name', width:'11%', title: '部门名称'}
                 ,{field:'type', width:'11%', title: '部门类型', sort: true}
                 ,{field:'address', width:'11%', title: '部门地址'}

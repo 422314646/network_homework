@@ -20,19 +20,33 @@
          </tr>-->
         <tr>
             <td style="text-align:right;">事件类型：</td>
-            <td><input type="text" class="textBox length-middle" id="type"/></td>
-        </tr>
-        <tr>
-            <td style="text-align:right;">具体事件描述：</td>
-            <td><input type="text" class="textBox length-middle" id="detail" /></td>
+            <td><select type="text" class="textBox length-middle" id="type">
+                    <option>1:违处信息</option>
+                    <option>2:网络攻击</option>
+                    <option>3:恶意软件</option>
+                    <option>4:信息泄露</option>
+                    <option>5:安全威胁/漏洞</option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td style="text-align:right;">事务类型：</td>
-            <td><input type="text" class="textBox length-middle" id="tranType"></td>
+            <td><select type="text" class="textBox length-middle" id="tranType">
+                    <option>1:安全事件通报</option>
+                    <option>2:热点事件发布</option>
+                </select>
+            </td>
         </tr>
         <tr>
             <td style="text-align:right;">辖区：</td>
-            <td><input type="text" class="textBox length-middle" id="handler_department" /></td>
+            <td>
+                <select type="text" class="textBox length-middle" id="handler_department" >
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right;">具体事件描述：</td>
+            <td><textarea type="text" class="textBox length-middle" id="detail" ></textarea></td>
         </tr>
         <tr>
             <td style="text-align:right;"></td>
@@ -41,9 +55,26 @@
     </table>
 </div>
 
+<script>
+    $.ajax({
+        type: "get",
+        url: "/department",
+        data: {page: 1, limit: 20, type: 3},
+        success: function (result) {
+            console.log(result);
+            console.log(result.departments);
+            for (i = 0; i < result.count; i++) {
+                $("#handler_department").append("<option value=" + result.departments[i].id + ">" + result.departments[i].name + "</option>");
+            }
+        }
+    })
+</script>
+
 
 <script>
     function buttonClick_search(){
+        // console.log("hello", document.getElementById("handler_department"));
+
         var res = confirm("确认提交");
         if(res == true){
             var params = {
@@ -51,6 +82,7 @@
                 "detail": document.getElementById( "detail").value,
                 "tranType": parseInt(document.getElementById("tranType").value),
                 "handler_department": parseInt(document.getElementById("handler_department").value),
+
             };
                 $.ajax({
                     type : "POST",  //提交方式
@@ -59,7 +91,7 @@
                     success : function(result) {
                         console.log(result);
                         alert("添加成功");
-
+                        parent.location.reload();
                     },
                     error: function (XMLHttpRequest, textStatus, errorThrown) {
                         console.log(XMLHttpRequest.responseText);
@@ -67,7 +99,6 @@
                         alert(j.error);
                     }
                 });
-        }else{
         }
     }
 

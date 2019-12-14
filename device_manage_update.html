@@ -1,10 +1,127 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>修改事物信息</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="style/adminStyle.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/md5.js"></script>
+
 </head>
 <body>
+<div class="wrap">
+    <div class="page-title">
+        <span class="modular fl"><i class="user"></i><em>修改事件信息</em></span>
+    </div>
+    <table class="noborder">
+       <!-- <tr>
+            <td style="text-align:right;">事件编号:</td>
+            <td><div  class="textBox length-middle" >
+                <span id="id"></span>
+            </div></td>
+        </tr>
+        <tr>-->
+            <td style="text-align:right;">事件状态:</td>
+            <td><select type="text" class="textBox length-middle" id="status" >
+                    <option>1.待办事务</option>
+                    <option>2.处理中事项</option>
+                    <option>3.已完成事项</option>
+                </select>
+            </td>
+        </tr>
 
+        <tr>
+            <td style="text-align:right;">处理事件用户：</td>
+            <td><input type="text" class="textBox length-middle" id="handler" /></td>
+        </tr>
+        <tr>
+            <td style="text-align:right;"></td>
+            <td><input type="button" class="tdBtn" value="保存"  onclick="buttonClick_search()"/></td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    var last = JSON.parse(localStorage.getItem("data"));
+    function buttonClick_search() {
+        console.log("ddd");
+        console.log(last);
+        var res = confirm("确认提交");
+        if (res == true) {
+            var params = {
+                "id":parseInt(document.getElementById( "id").value),
+                "status": parseInt(document.getElementById( "status").value),
+                "handler": parseInt(document.getElementById( "handler").value),
+            };
+            $.ajax({
+                type : "PUT",  //提交方式
+                url : "/transaction",//路径
+                data: JSON.stringify(params),
+                success : function(result) {
+                    console.log(result);
+                    alert("修改成功");
+                    parent.location.reload();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest.responseText);
+                    var j = JSON.parse(XMLHttpRequest.responseText);
+                    alert(j.error);
+                }
+            });
+        } else {
+
+        }
+    }
+    var data1;
+    function GetUrlParam(paraName) {
+        var url = document.location.toString();
+        data=localStorage.getItem("data1");
+        data1=JSON.parse(data);
+        console.log(data1);
+        console.log(data1.id);
+
+        $("#id").text(data1.id ).show();
+       // $("#id").attr("value", data1.id);
+        $("#name ").attr("value", data1.name);
+        $("#type").attr("value", data1.type);
+
+
+
+    }
+
+    //获取界面传递过来的参数
+
+    var data = GetUrlParam("data")
+    setParamSign = function (params) {
+        if (params) {
+            var sign = md5(params);
+            if (typeof params == "string") {
+                params += ("&sign=" + sign);
+            }
+            else {
+                params["sign"] = sign;
+            }
+        }
+        return sign;
+    }
+    jsonSort=function(jsonObj) {
+        var arr=[];
+        for(var key in jsonObj){
+            arr.push(key)
+        }
+        arr.sort();
+        var str='';
+        for(var i in arr){
+            str +=jsonObj[arr[i]]
+        }
+
+        return str
+    }
+
+
+    function conver(s) {
+        return s < 10 ? '0' + s : s;
+    }
+</script>
 </body>
 </html>

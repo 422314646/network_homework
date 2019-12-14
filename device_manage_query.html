@@ -24,8 +24,14 @@
 <table class="layui-hide" id="test" lay-filter="demo"></table>
 <div style="display: none;"id="userTool">
     <div>
-        <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">增加部门信息</button>
+        <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">增加事务信息</button>
         <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>
+<!--        <div style="float: right">-->
+<!--&lt;!&ndash;            <input id="1" style="height: 30px; border-radius:20px" placeholder="事件类型" />&ndash;&gt;-->
+<!--            <input id="2" style="height: 30px; border-radius:5px" placeholder=" 辖区"/>-->
+<!--            <input id="3" style="height: 30px; border-radius:5px" placeholder=" 企业"/>-->
+<!--            <button style="border-radius:5px" class="layui-btn layui-btn-sm" type="button" onclick="addOutputInfo()">搜索</button>-->
+<!--        </div>-->
     </div>
 
 
@@ -35,6 +41,23 @@
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
+    var evenType = new Map();
+    evenType[1] = '违处信息';
+    evenType[2] = '网络攻击';
+    evenType[3] = '恶意软件';
+    evenType[4] = '信息泄露';
+    evenType[5] = '安全威胁/漏洞';
+
+    var eventype1 = new Map();
+    eventype1[1] = '待办事项';
+    eventype1[2] = '处理中事项';
+    eventype1[3] = '已完成事项';
+
+    var eventype2 = new Map();
+    eventype2[1] = '安全事件通报';
+    eventype2[2] = '热点事件发布';
+
+
     layui.use('table', function(){
         var table = layui.table;
 
@@ -57,17 +80,35 @@
             }
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
-                {field:'id', width:'10%', title: '事务状态',id:'id'}
-                ,{field:'created_at', width:'10%', title: '事务状态对应的事务数量'}
+                {field:'seq', width:'6%', title: '编号', type: 'numbers'}
+                ,{field:'id', title: '事件编号',id:'id', hide:true}
+                ,{field:'publisher', width:'10%', title: '发布者ID', sort: true}
+                ,{field:'created_at', width:'15%', title: '事务创建时间', sort: true}
+                ,{field:'type', width:'10%', title: '事件类型', sort: true
+                    ,templet: function(d){
+                         return evenType[d.type];
+                } }
+                ,{field:'status', width:'10%', title: '事件状态', sort: true
+                    ,templet: function (d) {
+                        return eventype1[d.status];
+                    }}
+                ,{field:'detail', width:'10%', title: '具体事件描述'}
+                ,{field:'tran_type', width:'8%', title: '事务类型', sort: true
+                    ,templet: function (d) {
+                        return eventype2[d.tran_type];
+                    }}
+                ,{field:'handler_department', width:'10%', title: '辖区', sort: true}
+                ,{field:'handler', width:'10%', title: '处理事件用户', sort: true}
+                ,{fixed: 'right', width:150, align:'center', toolbar: '#barDemo',width:'10%'}
             ]]
         });
     });
 
 </script>
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
 </script>
 
 <script>
@@ -102,13 +143,13 @@
                 });
             } else if(obj.event === 'edit'){
                 //layer.alert('编辑行：<br>'+ JSON.stringify(data))
-                localStorage.setItem("data",JSON.stringify(data));
+                localStorage.setItem("data1",JSON.stringify(data));
                 layer.open({
                     type: 2,
                     skin: 'layui-layer-rim', //加上边框
                     area: ['520px', '340px'], //宽高
-                    content: 'goods_manage_update.html',
-                    title:"修改部门信息"
+                    content: 'device_manage_update.html',
+                    title:"修改事务信息"
                     //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
 
 
@@ -123,7 +164,7 @@
         layer.open({
             type: 2,
             skin: 'layui-layer-rim', //加上边框
-            area: ['520px', '340px'], //宽高
+            area: ['520px', '355px'], //宽高
             content: 'device_manage_add.html',
             title:"添加信息"
         });
