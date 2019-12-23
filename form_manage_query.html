@@ -24,7 +24,7 @@
 <table class="layui-hide" id="test" lay-filter="demo"></table>
 <div style="display: none;"id="userTool">
     <div>
-        <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">注册管理员</button>
+        <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">添加用户</button>
         <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>
     </div>
 
@@ -63,14 +63,15 @@
             }
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
-                {field:'seq', width:'6%', title: '编号', type: 'numbers'}
-                ,{field:'account', width:'10%', title: '登录账号',id:'id',hide:true}
-                ,{field:'name', width:'11%', title: '名字'}
-                ,{field:'phone', width:'16%', title: '手机号码'}
-                ,{field:'email', width:'16%', title: '邮箱地址'}
-                ,{field:'wechat', title: '微信号', width:'15%'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
-                ,{field:'department_name', title: '部门名称', width:'11%'}
-                ,{field:'department_type', title: '部门类型', width:'11%'
+                {field:'seq', width:'5%', title: '编号', type: 'numbers'}
+                ,{field:'id', width:'10%', title: '用户ID',id:'id', sort:true, hide: true}
+                ,{field:'account', width:'12%', title: '登录账号'}
+                ,{field:'name', width:'12%', title: '用户姓名'}
+                ,{field:'phone', width:'12%', title: '手机号码'}
+                ,{field:'email', width:'12%', title: '邮箱地址'}
+                ,{field:'wechat', title: '微信号', width:'12%'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                ,{field:'department_name', title: '部门名称', width:'12%'}
+                ,{field:'department_type', title: '部门类型', width:'12%'
                     , templet:function(d) {
                         if (departmentType.hasOwnProperty(d.department_type)) {
                             return departmentType[d.department_type];

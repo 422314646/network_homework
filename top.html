@@ -13,7 +13,7 @@
 
 <div class="layui-layout layui-layout-admin">
  <div class="layui-header">
-  <div class="layui-logo">欢迎来到后台管理系统</div>
+  <div class="layui-logo">网络应急响应平台</div>
   <!-- 头部区域（可配合layui已有的水平导航） -->
   <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
@@ -32,6 +32,13 @@
             parent.window.location.href = "index.html";
         }
     }
+
+    var departmentType = {};
+    departmentType['1'] = '管理员';
+    departmentType['2'] = '市级单位';
+    departmentType['3'] = '市级各辖区单位';
+    departmentType['4'] = '受监管企业单位';
+    departmentType['5'] = '签约技术支持/安全服务单位';
 
     function logout() {
         $.ajax({
@@ -52,6 +59,7 @@
 </script>
 <script>
     var username=localStorage.getItem("username");
-    $("#name").text("欢迎您："+username ).show();
+    var usertype = localStorage.getItem("usertype");
+    $("#name").text("欢迎您，"+ departmentType[usertype] + "：" +username ).show();
 </script>
 </html>
