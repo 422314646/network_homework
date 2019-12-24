@@ -24,36 +24,42 @@
 <table class="layui-hide" id="test" lay-filter="demo"></table>
 <div style="display: none;"id="userTool">
     <div>
+        <button class="layui-btn" id="trans_search" onclick="trans_query()">查询</button>
         <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">添加事务</button>
-        <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>
-
-
-        <select id="trans-status">
-                <option value="">事务状态</option>
+<!--        <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>-->
+        <div style="width: 100px;float: left !important;">
+            <select id="trans-status">
+                <option value="">请选择</option>
                 <option value="1">待办事项</option>
                 <option value="2">处理中事项</option>
                 <option value="3">已完成事项</option>
-        </select>
-        <select id="trans-type">
-            <option value="">事务类型</option>
-            <option value="1">安全事件通报</option>
-            <option value="2">热点事件发布</option>
-        </select>
-        <select id="event-type">
-            <option value="">事件类型</option>
-            <option value="1">违处信息</option>
-            <option value="2">网络攻击</option>
-            <option value="2">恶意软件</option>
-            <option value="2">信息泄露</option>
-            <option value="2">安全威胁/漏洞</option>
-
-        </select>
-        <select id="trans_handler_department">
-            <option value="">辖区选择</option>
-        </select>
-        <input type="text" placeholder="企业名称" autocomplete="off" class="layui-input" id="trans-handler">
-        <button class="layui-btn" id="trans_search" onclick="trans_query()">查询</button>
-
+            </select>
+        </div>
+        <div style="width: 100px;float: left !important;">
+            <select id="trans-type">
+                <option value="">请选择</option>
+                <option value="1">安全事件通报</option>
+                <option value="2">热点事件发布</option>
+            </select>
+        </div>
+        <div style="width: 100px;float: left !important;">
+            <select id="event-type">
+                <option value="">请选择</option>
+                <option value="1">违处信息</option>
+                <option value="2">网络攻击</option>
+                <option value="2">恶意软件</option>
+                <option value="2">信息泄露</option>
+                <option value="2">安全威胁/漏洞</option>
+            </select>
+        </div>
+        <div style="width: 100px;float: left !important;">
+            <select id="trans_handler_department" style="width: 100px;float: left !important;">
+                <option value="">辖区选择</option>
+            </select>
+        </div>
+        <div style="width: 100px;float: left !important;">
+            <input type="text" placeholder="企业名称" autocomplete="off" class="layui-input" id="trans-handler">
+        </div>
 
 <!--        <div style="float: right">-->
 <!--&lt;!&ndash;            <input id="1" style="height: 30px; border-radius:20px" placeholder="事件类型" />&ndash;&gt;-->
@@ -167,7 +173,6 @@
             }
             var handler_department = document.getElementById("trans_handler_department").value;
             if (handler_department.length > 0) {
-                // params.handler_department = parseInt(handler_department);
                 params['handler-department'] = parseInt(handler_department);
             }
             var handler = document.getElementById("trans-handler").value;
