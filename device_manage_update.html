@@ -32,7 +32,11 @@
 
         <tr>
             <td style="text-align:right;">处理事件用户：</td>
-            <td><input type="text" class="textBox length-middle" id="handler" /></td>
+            <td>
+                <select type="text" class="textBox length-middle" id="handler" >
+                </select>
+            </td>
+<!--            <td><input type="text" class="textBox length-middle" id="handler" /></td>-->
         </tr>
         <tr>
             <td style="text-align:right;"></td>
@@ -42,14 +46,28 @@
 </div>
 
 <script>
-    var last = JSON.parse(localStorage.getItem("data"));
+    $.ajax({
+        type: "post",
+        url: "/user/type",
+        data: JSON.stringify({"type":[4,5]}),
+        success: function (result) {
+            console.log("user", result);
+            for (i = 0; i < result.length; i++) {
+                $("#handler").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+            }
+        }
+    })
+</script>
+
+
+<script>
+    var last = JSON.parse(localStorage.getItem("data1"));
     function buttonClick_search() {
         console.log("ddd");
-        console.log(last);
         var res = confirm("确认提交");
         if (res == true) {
             var params = {
-                "id":parseInt(document.getElementById( "id").value),
+                "id":parseInt(last.id),
                 "status": parseInt(document.getElementById( "status").value),
                 "handler": parseInt(document.getElementById( "handler").value),
             };

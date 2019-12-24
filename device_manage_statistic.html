@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>部门列表</title>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />-->
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>-->
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+    <script type="text/javascript" src="./js/md5.js"></script>
+    <script type="text/javascript" src="./js/highcharts.js"></script>
+    <script type="text/javascript" src="./js/modules/exporting.js"></script>
+    <script type="text/javascript" src="./js/highcharts-3d.js"></script>
+    <script src="https://cdn.bootcss.com/layer/3.1.0/layer.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="./config/utils.js"></script>
+    <script src="layui/layui.js" charset="utf-8"></script>
+</head>
+<body>
+<table class="layui-hide" id="test" lay-filter="demo"></table>
+<div style="display: none;"id="userTool">
+    <div>
+        <!--        <div style="float: right">-->
+        <!--&lt;!&ndash;            <input id="1" style="height: 30px; border-radius:20px" placeholder="事件类型" />&ndash;&gt;-->
+        <!--            <input id="2" style="height: 30px; border-radius:5px" placeholder=" 辖区"/>-->
+        <!--            <input id="3" style="height: 30px; border-radius:5px" placeholder=" 企业"/>-->
+        <!--            <button style="border-radius:5px" class="layui-btn layui-btn-sm" type="button" onclick="addOutputInfo()">搜索</button>-->
+        <!--        </div>-->
+    </div>
+
+
+</div>
+</body>
+
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script>
+    var statisticType = {};
+    statisticType['1'] = '待办事项';
+    statisticType['2'] = '处理中事项';
+    statisticType['3'] = '已完成事项';
+
+    layui.use('table', function(){
+        var table = layui.table;
+
+        table.render({
+            elem: '#test'
+            ,url:'/transaction/statistic'
+            ,method:"get"
+            ,toolbar: "#userTool"
+            ,title: '部门数据表'
+           // ,page:true
+            ,limit:20
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                console.log(res)
+                return {
+                    "code": 0, //解析接口状态
+                    "msg": "正在加载", //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.statistic //解析数据列表
+                };
+            }
+
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cols: [[
+                 {field:'seq', width:'5%', title: '编号', type: 'numbers'}
+                ,{field:'status', title: '事务状态',width:'10%'
+                    , templet:function(d) {
+                        if (statisticType.hasOwnProperty(d.status)) {
+                        return statisticType[d.status];
+            }
+            return "";
+        }}
+                ,{field:'count', width:'10%', title: '事务数量', sort: true}
+            ]]
+        });
+    });
+
+</script>
+
+
+</html>
