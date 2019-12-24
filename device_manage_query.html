@@ -24,8 +24,36 @@
 <table class="layui-hide" id="test" lay-filter="demo"></table>
 <div style="display: none;"id="userTool">
     <div>
-        <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">增加事务信息</button>
+        <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">添加事务</button>
         <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>
+
+
+        <select id="trans-status">
+                <option value="">请选择</option>
+                <option value="1">待办事项</option>
+                <option value="2">处理中事项</option>
+                <option value="3">已完成事项</option>
+        </select>
+        <select id="trans-type">
+            <option value="">请选择</option>
+            <option value="1">安全事件通报</option>
+            <option value="2">热点事件发布</option>
+        </select>
+        <select id="event-type">
+            <option value="">请选择</option>
+            <option value="1">违处信息</option>
+            <option value="2">网络攻击</option>
+            <option value="2">恶意软件</option>
+            <option value="2">信息泄露</option>
+            <option value="2">安全威胁/漏洞</option>
+
+        </select>
+        <select id="trans-handler-department">
+        </select>
+        <input type="text" placeholder="企业名称" autocomplete="off" class="layui-input" id="trans-handler">
+        <button class="layui-btn" id="trans_search" onclick="trans_query()">查询</button>
+
+
 <!--        <div style="float: right">-->
 <!--&lt;!&ndash;            <input id="1" style="height: 30px; border-radius:20px" placeholder="事件类型" />&ndash;&gt;-->
 <!--            <input id="2" style="height: 30px; border-radius:5px" placeholder=" 辖区"/>-->
@@ -33,14 +61,16 @@
 <!--            <button style="border-radius:5px" class="layui-btn layui-btn-sm" type="button" onclick="addOutputInfo()">搜索</button>-->
 <!--        </div>-->
     </div>
-
-
 </div>
 </body>
 
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
+    onload = function(){
+        
+    }
+
     var evenType = new Map();
     evenType[1] = '违处信息';
     evenType[2] = '网络攻击';
@@ -57,11 +87,11 @@
     eventype2[1] = '安全事件通报';
     eventype2[2] = '热点事件发布';
 
-
+    var tableInst = {};
     layui.use('table', function(){
         var table = layui.table;
 
-        table.render({
+        tableInst = table.render({
             elem: '#test'
             ,url:'/transaction'
             ,method:"get"
@@ -103,6 +133,38 @@
             ]]
         });
     });
+
+
+    // $('#trans_search').on('click', function () {
+    function trans_query() {
+            var params = {
+                "page": 1,
+                "limit": 200,
+            };
+            var status = document.getElementById( "trans-status").value;
+            if (status.length > 0) {
+                params.status = parseInt(status);
+            }
+            var type = document.getElementById( "event-type").value;
+            if (type.length > 0) {
+                params.type = parseInt(type);
+            }
+            var tran_type = document.getElementById( "trans-type").value;
+            if (tran_type.length > 0) {
+                params.tran_type = parseInt(tran_type);
+            }
+            var handler_department = document.getElementById("trans-handler-department").value;
+            if (handler_department.length > 0) {
+                params.handler_department = parseInt(handler_department)
+            }
+            var handler = document.getElementById("trans-handler").value;
+            console.log(params);
+
+            tableInst.reload({
+                'where': params
+            })
+        // })
+    }
 
 </script>
 <script type="text/html" id="barDemo">
@@ -169,7 +231,6 @@
             title:"添加信息"
         });
     }
-
 
 </script>
 
