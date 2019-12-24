@@ -64,12 +64,12 @@
                     <option value="">企业选择</option>
             </select>
         </div>
-        <div class="layui-inline" style="float: left !important;">
+        <div class="layui-inline" style="float: left">
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" id="test1" placeholder="起始时间">
             </div>
         </div>
-        <div class="layui-inline" style="float: left !important;">
+        <div class="layui-inline" style="float: left">
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" id="test2" placeholder="截至时间">
             </div>
@@ -177,38 +177,7 @@
 
 
     // $('#trans_search').on('click', function () {
-    function trans_query() {
-            var params = {
-                "page": 1,
-                "limit": 200,
-            };
-            var status = document.getElementById( "trans-status").value;
-            if (status.length > 0) {
-                params.status = parseInt(status);
-            }
-            var type = document.getElementById( "event-type").value;
-            if (type.length > 0) {
-                params.type = parseInt(type);
-            }
-            var tran_type = document.getElementById( "trans-type").value;
-            if (tran_type.length > 0) {
-                params.tran_type = parseInt(tran_type);
-            }
-            var handler_department = document.getElementById("trans_handler_department").value;
-            if (handler_department.length > 0) {
-                params['handler-department'] = parseInt(handler_department);
-            }
-            var handler = document.getElementById("trans_handler").value;
-            if (handler.length > 0) {
-                params['handler'] = parseInt(handler);
-            }
-            console.log(params);
 
-            tableInst.reload({
-                'where': params
-            })
-        // })
-    }
 
 </script>
 <script type="text/html" id="barDemo">
@@ -219,21 +188,66 @@
 </script>
 
 <script>
+    var startTime = {};
+    var endTime = {};
     layui.use('laydate', function(){
         var laydate = layui.laydate;
         laydate.render({
              elem: '#test1'
+            ,done: function(value, date, endDate){
+                 startTime = value;
+            }
         });
     });
-</script>
 
-<script>
     layui.use('laydate', function(){
         var laydate = layui.laydate;
         laydate.render({
             elem: '#test2'
+            ,done: function(value, date, endDate){
+                endTime = value;
+            }
         });
     });
+
+    function trans_query() {
+        var params = {
+            "page": 1,
+            "limit": 200,
+        };
+        var status = document.getElementById( "trans-status").value;
+        if (status.length > 0) {
+            params.status = parseInt(status);
+        }
+        var type = document.getElementById( "event-type").value;
+        if (type.length > 0) {
+            params.type = parseInt(type);
+        }
+        var tran_type = document.getElementById( "trans-type").value;
+        if (tran_type.length > 0) {
+            params.tran_type = parseInt(tran_type);
+        }
+        var handler_department = document.getElementById("trans_handler_department").value;
+        if (handler_department.length > 0) {
+            params['handler-department'] = parseInt(handler_department);
+        }
+        var handler = document.getElementById("trans_handler").value;
+        if (handler.length > 0) {
+            params['handler'] = parseInt(handler);
+        }
+        if (startTime.length > 0 && endTime.length > 0) {
+            params['start'] = startTime;
+            params['end'] = endTime;
+        }
+        console.log(params);
+
+        tableInst.reload({
+            'where': params
+        })
+    }
+</script>
+
+<script>
 </script>
 
 <script>
