@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>修改事物信息</title>
+    <title>修改事务信息</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="style/adminStyle.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="./js/jquery.js"></script>
@@ -20,23 +20,32 @@
                 <span id="id"></span>
             </div></td>
         </tr>
-        <tr>-->
-            <td style="text-align:right;">事件状态:</td>
+    -->
+        <tr id="tran_status">
+            <td style="text-align:right;" >事件状态:</td>
             <td><select type="text" class="textBox length-middle" id="status" >
-                    <option>1.待办事务</option>
-                    <option>2.处理中事项</option>
-                    <option>3.已完成事项</option>
+                    <option value="1">待办</option>
+                    <option value="2">处理中</option>
+                    <option value="3">已完成</option>
+                    <option value="4">待确认</option>
+                    <option value="5">继续整改</option>
+                    <option value="6">予以处罚</option>
+                    <option value="7">予以关停</option>
                 </select>
             </td>
         </tr>
 
-        <tr>
+        <tr id="tran_handler">
             <td style="text-align:right;">处理事件用户：</td>
             <td>
                 <select type="text" class="textBox length-middle" id="handler" >
                 </select>
             </td>
 <!--            <td><input type="text" class="textBox length-middle" id="handler" /></td>-->
+        </tr>
+        <tr id = "tran_comment">
+            <td style="text-align:right;">备注信息：</td>
+            <td><textarea type="text" class="textBox length-middle" id="comment" ></textarea></td>
         </tr>
         <tr>
             <td style="text-align:right;"></td>
@@ -46,19 +55,42 @@
 </div>
 
 <script>
+    var departmentType = {};
+    departmentType['2'] = '市级单位';
+    departmentType['3'] = '市级各辖区单位';
+    departmentType['4'] = '受监管企业单位';
+    departmentType['5'] = '签约技术支持/安全服务单位';
+
     $.ajax({
         type: "post",
-        url: "/user/type",
+        url: "/department/type",
         data: JSON.stringify({"type":[4,5]}),
         success: function (result) {
             console.log("user", result);
             for (i = 0; i < result.length; i++) {
-                $("#handler").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                $("#handler").append("<option value=" + result[i].id + ">" + departmentType[result[i].type] +":" + result[i].name + "</option>");
             }
         }
     })
 </script>
 
+<script>
+    role = localStorage.getItem("usertype");
+    console.log("role", role);
+    if (2 == role) {
+        // 市级用户不能修改事务状态
+        $('#tran_status').remove();
+        $('#tran_comment').remove();
+    } else if (4 == role || 5 == role) {
+        // 受监管企业/技术支持公司只能修改为处理中和完成状态
+        $('#tran_status option[value=1]').remove();
+        $('#tran_status option[value=4]').remove();
+        $('#tran_status option[value=5]').remove();
+        $('#tran_status option[value=6]').remove();
+        $('#tran_status option[value=7]').remove();
+        $('#tran_handler').remove();
+    }
+</script>
 
 <script>
     var last = JSON.parse(localStorage.getItem("data1"));
@@ -68,9 +100,24 @@
         if (res == true) {
             var params = {
                 "id":parseInt(last.id),
-                "status": parseInt(document.getElementById( "status").value),
-                "handler": parseInt(document.getElementById( "handler").value),
+                // "status": parseInt(document.getElementById( "status").value),
+                // "handler": parseInt(document.getElementById( "handler").value),
+                "comment": document.getElementById("comment").value,
             };
+            
+            var status = document.getElementById("status").value;
+            console.log(status);
+            if (status.length > 0) {
+                params['status'] = parseInt(status);
+            }
+            var handlerElem = document.getElementById("handler");
+            if (handlerElem != null) {
+                var handler = handlerElem.value;
+                if (handler.length > 0) {
+                    params['handler'] = parseInt(handler);
+                }
+            }
+
             $.ajax({
                 type : "PUT",  //提交方式
                 url : "/transaction",//路径

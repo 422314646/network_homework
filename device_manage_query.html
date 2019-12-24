@@ -28,37 +28,41 @@
         <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">添加事务</button>
 <!--        <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>-->
         <div style="width: 100px;float: left !important;">
-            <select id="trans-status">
-                <option value="">请选择</option>
-                <option value="1">待办事项</option>
-                <option value="2">处理中事项</option>
-                <option value="3">已完成事项</option>
+            <select id="trans-status" lay-search>
+                <option value="">事务状态</option>
+                <option value="1">待办</option>
+                <option value="2">处理中</option>
+                <option value="3">已完成</option>
+                <option value="4">待确认</option>
             </select>
         </div>
         <div style="width: 100px;float: left !important;">
-            <select id="trans-type">
-                <option value="">请选择</option>
+            <select id="trans-type" lay-search>
+                <option value="">事务类型</option>
                 <option value="1">安全事件通报</option>
                 <option value="2">热点事件发布</option>
             </select>
         </div>
         <div style="width: 100px;float: left !important;">
-            <select id="event-type">
-                <option value="">请选择</option>
+            <select id="event-type" lay-search>
+                <option value="">事件类型</option>
                 <option value="1">违处信息</option>
                 <option value="2">网络攻击</option>
-                <option value="2">恶意软件</option>
-                <option value="2">信息泄露</option>
-                <option value="2">安全威胁/漏洞</option>
+                <option value="3">恶意软件</option>
+                <option value="4">信息泄露</option>
+                <option value="5">安全威胁/漏洞</option>
             </select>
         </div>
         <div style="width: 100px;float: left !important;">
-            <select id="trans_handler_department" style="width: 100px;float: left !important;">
+            <select id="trans_handler_department" style="width: 100px;float: left !important;" lay-search>
                 <option value="">辖区选择</option>
             </select>
         </div>
         <div style="width: 100px;float: left !important;">
-            <input type="text" placeholder="企业名称" autocomplete="off" class="layui-input" id="trans-handler">
+            <!-- <input type="text" placeholder="企业名称" autocomplete="off" class="layui-input" id="trans-handler"> -->
+            <select id="trans_handler" style="width: 100px;float: left !important;" lay-search>
+                    <option value="">企业选择</option>
+            </select>
         </div>
 
 <!--        <div style="float: right">-->
@@ -75,14 +79,19 @@
 
 <script>
     $.ajax({
-        type: "get",
-        url: "/department",
-        data: {page: 1, limit: 20, type: 3},
+        type: "POST",
+        url: "/department/type",
+        data: JSON.stringify({"type":[3, 4, 5]}),
         success: function (result) {
             console.log(result);
-            console.log(result.departments);
-            for (i = 0; i < result.count; i++) {
-                $("#trans_handler_department").append("<option value=" + result.departments[i].id + ">" + result.departments[i].name + "</option>");
+            for (i = 0; i < result.length; i++) {
+                if (result[i].type == 3) {
+                    $("#trans_handler_department").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                } else if (result[i].type == 4 || result[i].type == 5) {
+                    $("#trans_handler").append("<option value=" + result[i].id + ">" + result[i].name + "</option>");
+                } else {
+                    console.log(result[i].type);
+                }
             }
         }
     })
@@ -98,8 +107,12 @@
 
     var eventype1 = new Map();
     eventype1[1] = '待办事项';
-    eventype1[2] = '处理中事项';
-    eventype1[3] = '已完成事项';
+    eventype1[2] = '处理中';
+    eventype1[3] = '已完成';
+    eventype1[4] = '待确认';
+    eventype1[5] = '继续整改';
+    eventype1[6] = '予以处罚';
+    eventype1[7] = '予以关停';
 
     var eventype2 = new Map();
     eventype2[1] = '安全事件通报';
@@ -128,10 +141,10 @@
             }
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
-                {field:'seq', width:'6%', title: '编号', type: 'numbers'}
+                {field:'seq', width:'5%', title: '编号', type: 'numbers'}
                 ,{field:'id', title: '事件编号',id:'id', hide:true}
-                ,{field:'publisher', width:'10%', title: '发布者ID', sort: true}
-                ,{field:'created_at', width:'15%', title: '事务创建时间', sort: true}
+                ,{field:'publisher', width:'10%', title: '发布者', sort: true}
+                ,{field:'created_at', width:'12%', title: '创建时间', sort: true}
                 ,{field:'type', width:'10%', title: '事件类型', sort: true
                     ,templet: function(d){
                          return evenType[d.type];
@@ -140,13 +153,13 @@
                     ,templet: function (d) {
                         return eventype1[d.status];
                     }}
-                ,{field:'detail', width:'10%', title: '具体事件描述'}
                 ,{field:'tran_type', width:'8%', title: '事务类型', sort: true
                     ,templet: function (d) {
                         return eventype2[d.tran_type];
                     }}
-                ,{field:'handler_department', width:'10%', title: '辖区', sort: true}
-                ,{field:'handler', width:'10%', title: '处理事件用户', sort: true}
+                ,{field:'handler_department', width:'10%', title: '处理辖区', sort: true}
+                ,{field:'handler', width:'10%', title: '处理企业', sort: true}
+                ,{field:'detail', width:'15%', title: '事件描述'}
                 ,{fixed: 'right', width:150, align:'center', toolbar: '#barDemo',width:'10%'}
             ]]
         });
@@ -175,7 +188,10 @@
             if (handler_department.length > 0) {
                 params['handler-department'] = parseInt(handler_department);
             }
-            var handler = document.getElementById("trans-handler").value;
+            var handler = document.getElementById("trans_handler").value;
+            if (handler.length > 0) {
+                params['handler'] = parseInt(handler);
+            }
             console.log(params);
 
             tableInst.reload({
@@ -186,8 +202,9 @@
 
 </script>
 <script type="text/html" id="barDemo">
-
-    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    {{#  if(d.status < 3 || d.status == 4 || d.status == 5){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    {{#  } }}
     <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
 </script>
 
@@ -197,6 +214,7 @@
         var table = layui.table;
         table.on('tool(demo)', function(obj){
             var data = obj.data;
+            console.log("data:", data);
             if(obj.event === 'detail'){
                 layer.msg('ID：'+ data.id + ' 的查看操作');
                 layer.alert('详细信息：<br>'+ JSON.stringify(data))
