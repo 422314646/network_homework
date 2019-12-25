@@ -5,7 +5,7 @@
 <meta http-equiv="Pragma" content="no-cache"> 
 <meta http-equiv="Cache-Control" content="no-cache"> 
 <meta http-equiv="Expires" content="0"> 
-<title>应急避灾管理系统</title>
+<title>网络应急响应平台</title>
 <link href="./style/login.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="./js/jquery.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
@@ -27,7 +27,7 @@
       <div class="login">
           <div class="login_logo"><a href="#"><img src="images/login_logo.png" /></a></div>
           <div class="login_name">
-               <p>应急避灾管理系统</p>
+               <p>网络应急响应平台</p>
           </div>
               <input name="username"  type="text" id="username" placeholder="用户名">
               <input name="password" type="password" id="password" placeholder = "密码"/>
@@ -51,9 +51,9 @@
             console.log("logined...");
             var usertype = localStorage.getItem("usertype");
             if (1 == usertype) {
-                window.location.href = "main.html";
+                window.location.href = "admin.html";
             } else {
-                window.location = "main1.html";
+                window.location = "user.html";
             }
         }
     }
@@ -72,9 +72,9 @@
                 localStorage.setItem("username", result.name);
                 localStorage.setItem("usertype", result.type)
                 if (result.type == 1){
-                    window.location = "main.html";
+                    window.location = "admin.html";
                 }else {
-                    window.location = "main1.html";
+                    window.location = "user.html";
                 }
 
             },

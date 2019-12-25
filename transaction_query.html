@@ -77,19 +77,10 @@
                 <input type="text" class="layui-input" id="end_time" placeholder="截至时间" autocomplete="off">
             </div>
         </div>
-
-<!--        <div style="float: right">-->
-<!--&lt;!&ndash;            <input id="1" style="height: 30px; border-radius:20px" placeholder="事件类型" />&ndash;&gt;-->
-<!--            <input id="2" style="height: 30px; border-radius:5px" placeholder=" 辖区"/>-->
-<!--            <input id="3" style="height: 30px; border-radius:5px" placeholder=" 企业"/>-->
-<!--            <button style="border-radius:5px" class="layui-btn layui-btn-sm" type="button" onclick="addOutputInfo()">搜索</button>-->
-<!--        </div>-->
     </div>
 </div>
 <table class="layui-hide" id="test" lay-filter="demo"></table>
 </body>
-
-<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
 <script>
     $.ajax({
@@ -155,15 +146,15 @@
             }
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
-                {field:'seq', width:'5%', title: '编号', type: 'numbers'}
+                {field:'seq', width:'4%', title: '编号', type: 'numbers'}
                 ,{field:'id', title: '事件编号',id:'id', hide:true}
-                ,{field:'publisher', width:'10%', title: '发布者', sort: true}
-                ,{field:'created_at', width:'12%', title: '创建时间', sort: true}
-                ,{field:'type', width:'10%', title: '事件类型', sort: true
+                ,{field:'publisher', width:'8%', title: '发布者', sort: true}
+                ,{field:'created_at', width:'10%', title: '创建时间', sort: true}
+                ,{field:'type', width:'8%', title: '事件类型', sort: true
                     ,templet: function(d){
                          return evenType[d.type];
                 } }
-                ,{field:'status', width:'10%', title: '事件状态', sort: true
+                ,{field:'status', width:'8%', title: '事件状态', sort: true
                     ,templet: function (d) {
                         return eventype1[d.status];
                     }}
@@ -171,22 +162,20 @@
                     ,templet: function (d) {
                         return eventype2[d.tran_type];
                     }}
-                ,{field:'handler_department', width:'10%', title: '处理辖区', sort: true}
-                ,{field:'handler', width:'10%', title: '处理企业', sort: true}
+                ,{field:'handler_department', width:'8%', title: '受理辖区', sort: true}
+                ,{field:'handler', width:'10%', title: '受理企业', sort: true}
                 ,{field:'detail', width:'15%', title: '事件描述'}
+                ,{field:'comment', width:'10%', title: '备注信息'}
                 ,{fixed: 'right', width:150, align:'center', toolbar: '#barDemo',width:'10%'}
             ]]
         });
     });
 
-
-    // $('#trans_search').on('click', function () {
-
-
 </script>
 <script type="text/html" id="barDemo">
         {{#  if(localStorage.getItem('usertype') != 2 && (d.status < 3 || d.status == 4 || d.status == 5)){ }}
                 <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <!-- <a class="layui-btn layui-btn-xs" lay-event="info">详情</a> -->
         {{#  } }}
     <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
 </script>
@@ -233,7 +222,7 @@
         }
         var handler_department = document.getElementById("trans_handler_department").value;
         if (handler_department.length > 0) {
-            params['handler-department'] = parseInt(handler_department);
+            params['handler_department'] = parseInt(handler_department);
         }
         var handler = document.getElementById("trans_handler").value;
         if (handler.length > 0) {
@@ -290,13 +279,10 @@
                 localStorage.setItem("data1",JSON.stringify(data));
                 layer.open({
                     type: 2,
-                    skin: 'layui-layer-rim', //加上边框
-                    area: ['520px', '340px'], //宽高
-                    content: 'device_manage_update.html',
-                    title:"修改事务信息"
-                    //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
-
-
+                    skin: 'layui-layer-molv', //加上边框
+                    area: ['600px', '440px'], //宽高
+                    content: 'transaction_update.html',
+                    title:"添加事务"
                 });
             }
         });
@@ -307,10 +293,10 @@
     function addOutputInfo(){
         layer.open({
             type: 2,
-            skin: 'layui-layer-rim', //加上边框
-            area: ['520px', '355px'], //宽高
-            content: 'device_manage_add.html',
-            title:"添加信息"
+           skin: 'layui-layer-lan', //加上边框
+           area: ['600px', '500px'], //宽高
+           content: 'transaction_add.html',
+           title:"添加事务"
         });
     }
 

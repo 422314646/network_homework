@@ -19,9 +19,9 @@
             <ul class="layui-nav layui-nav-tree"  lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">信息管理</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="device_manage_query.html" title="事务信息管理" target="mainCont" >事务信息</a></dd>
-                        <dd><a href="device_manage_statistic.html" title="事物统计信息" target="mainCont" >事务统计</a></dd>
+                    <dl class="layui-nav-child" id = 'menu'>
+                        <dd><a href="transaction_query.html" title="事务信息管理" target="mainCont" >事务信息</a></dd>
+                        <dd id='menu_statistic'><a href="transaction_statistic.html" title="事物统计信息" target="mainCont" >事务统计</a></dd>
                     </dl>
                 </li>
 
@@ -29,7 +29,12 @@
         </div>
     </div>
 
-
+<script>
+    var usertype = localStorage.getItem("usertype");
+    if (usertype != 2 && usertype != 3) {
+        $('#menu_statistic').remove();
+    }
+</script>
 
 </body>
 <script>

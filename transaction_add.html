@@ -4,68 +4,87 @@
     <title>添加事务</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="style/adminStyle.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
     <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./layui/layui.js"></script>
+    <script type="text/javascript" src="./layui/layui.all.js"></script>
     <script type="text/javascript" src="./js/md5.js"></script>
     <script type="text/javascript" src="./config/utils.js"></script>
 </head>
 <body>
 <div class="wrap" >
-    <div class="page-title">
-        <span class="modular fl"><i class="user"></i><em>添加事务</em></span>
-    </div>
     <table class="noborder">
-        <!-- <tr>
-             <td style="text-align:right;">部门ID：</td>
-             <td><input type="text" class="textBox length-middle" id="id"/></td>
-         </tr>-->
         <tr>
-            <td style="text-align:right;">事件类型：</td>
-            <td><select type="text" class="textBox length-middle" id="type">
-                    <option>1:违处信息</option>
-                    <option>2:网络攻击</option>
-                    <option>3:恶意软件</option>
-                    <option>4:信息泄露</option>
-                    <option>5:安全威胁/漏洞</option>
-                </select>
+            <td style="text-align:right; table-layout: fixed; width: 15%;">事件类型：</td>
+            <td>
+                <div class="layui-form">
+                    <select type="text" class="textBox length-middle" id="type">
+                        <option value="1">违处信息</option>
+                        <option value="2">网络攻击</option>
+                        <option value="3">恶意软件</option>
+                        <option value="4">信息泄露</option>
+                        <option value="5">安全威胁/漏洞</option>
+                    </select>
+                </div>
             </td>
         </tr>
         <tr>
             <td style="text-align:right;">事务类型：</td>
-            <td><select type="text" class="textBox length-middle" id="tranType">
-                    <option>1:安全事件通报</option>
-                    <option>2:热点事件发布</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align:right;">辖区：</td>
             <td>
-                <select type="text" class="textBox length-middle" id="handler_department" >
-                </select>
+                <div class="layui-form">
+                    <select type="text" class="textBox length-middle" id="tranType" lay-search>
+                        <option value="1">安全事件通报</option>
+                        <option value="2">热点事件发布</option>
+                    </select>
+                </div>
             </td>
         </tr>
         <tr>
-            <td style="text-align:right;">具体事件描述：</td>
-            <td><textarea type="text" class="textBox length-middle" id="detail" ></textarea></td>
+            <td style="text-align:right;">受理辖区：</td>
+            <td>
+                <div  class="layui-form">
+                    <select id="handler_department" >
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:right;">事件描述：</td>
+            <td><textarea type="text" required lay-verify="required" class="layui-textarea" id="detail" style="height: 200px; resize:none;" placeholder="请输入具体的事件描述信息..."></textarea></td>
         </tr>
         <tr>
             <td style="text-align:right;"></td>
-            <td><input type="button" class="tdBtn" value="保存"  onclick="buttonClick_search()"/></td>
+            <td>
+                <input type="button" class="layui-btn layui-btn-normal" value="确认添加"  onclick="buttonClick_search()"/>
+                <input type="reset" class="layui-btn layui-btn-primary" value="重置信息"  onclick="window.location.reload()"/>
+            </td>
         </tr>
     </table>
 </div>
 
 <script>
+</script>
+
+<script>
+    function renderForm() {
+        layui.use('form', function(){
+            var form = layui.form;
+            form.render();
+        });
+    }
+
     $.ajax({
         type: "get",
         url: "/department",
         data: {page: 1, limit: 20, type: 3},
         success: function (result) {
             console.log(result);
+            console.log(result.count);
             console.log(result.departments);
             for (i = 0; i < result.count; i++) {
                 $("#handler_department").append("<option value=" + result.departments[i].id + ">" + result.departments[i].name + "</option>");
             }
+            renderForm();
         }
     })
 </script>
@@ -73,10 +92,6 @@
 
 <script>
     function buttonClick_search(){
-        // console.log("hello", document.getElementById("handler_department"));
-
-        var res = confirm("确认提交");
-        if(res == true){
             var params = {
                 "type": parseInt(document.getElementById( "type").value),
                 "detail": document.getElementById( "detail").value,
@@ -99,9 +114,7 @@
                         alert(j.error);
                     }
                 });
-        }
     }
-
 </script>
 </body>
 </html>

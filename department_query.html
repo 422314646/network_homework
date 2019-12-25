@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>用户列表</title>
+    <title>部门列表</title>
     <meta charset="utf-8">
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -10,7 +10,7 @@
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
     <!--<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />-->
     <script type="text/javascript" src="./js/jquery.js"></script>
-    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>-->
+   <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>-->
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
     <script type="text/javascript" src="./js/md5.js"></script>
     <script type="text/javascript" src="./js/highcharts.js"></script>
@@ -24,7 +24,7 @@
 <table class="layui-hide" id="test" lay-filter="demo"></table>
 <div style="display: none;"id="userTool">
     <div>
-        <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">添加用户</button>
+        <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()">添加部门</button>
         <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>
     </div>
 
@@ -44,40 +44,48 @@
 
     layui.use('table', function(){
         var table = layui.table;
+        var time=getDate();
+        var username=localStorage.getItem("username");
+        var pwd=localStorage.getItem("pwd");
+        var params = {
+            "userName":username,
+            "password":pwd,
+            "timeStamp":time,
+        };
+        var sig=setParamSign(jsonSort(params));
+
         table.render({
             elem: '#test'
-            ,url:'/user'
-            ,method:"GET"
+           ,url:'/department'
+            ,method:"get"
             ,toolbar: "#userTool"
-            ,title: '用户数据表'
+            ,title: '部门数据表'
             ,page:true
             ,limit:20
+            ,loading:true
             ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
                 console.log(res)
                 return {
                     "code": 0, //解析接口状态
                     "msg": "正在加载", //解析提示文本
                     "count": res.count, //解析数据长度
-                    "data": res.users //解析数据列表
+                    "data": res.departments //解析数据列表
                 };
             }
             ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             ,cols: [[
                 {field:'seq', width:'5%', title: '编号', type: 'numbers'}
-                ,{field:'id', width:'10%', title: '用户ID',id:'id', sort:true, hide: true}
-                ,{field:'account', width:'12%', title: '登录账号'}
-                ,{field:'name', width:'12%', title: '用户姓名'}
-                ,{field:'phone', width:'12%', title: '手机号码'}
-                ,{field:'email', width:'12%', title: '邮箱地址'}
-                ,{field:'wechat', title: '微信号', width:'12%'} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
-                ,{field:'department_name', title: '部门名称', width:'12%'}
-                ,{field:'department_type', title: '部门类型', width:'12%'
+                ,{field:'id', width:'10%', title: '部门ID',id:'id', sort:true, hide: true}
+                ,{field:'name', width:'11%', title: '部门名称', sort:true}
+                ,{field:'type', width:'11%', title: '部门类型', sort:true
                     , templet:function(d) {
-                        if (departmentType.hasOwnProperty(d.department_type)) {
-                            return departmentType[d.department_type];
-                        }
-                        return "";
+                        return departmentType[d.type];
                     }}
+                ,{field:'address', width:'20%', title: '部门地址', sort:true}
+                ,{field:'owner', title: '部门负责人', width:'11%', sort:true} //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                ,{field:'owner_contact', title: '负责人号码', width:'10%', sort:true}
+                ,{field:'admin', title: '网安姓名', width:'10%', sort:true}
+                ,{field:'admin_contact', title: '网安号码', width:'10%', sort:true}
                 ,{fixed: 'right', width:150, align:'center', toolbar: '#barDemo',width:'10%'}
             ]]
         });
@@ -99,17 +107,16 @@
                 layer.msg('ID：'+ data.id + ' 的查看操作');
                 layer.alert('详细信息：<br>'+ JSON.stringify(data))
             } else if(obj.event === 'del'){
-                layer.confirm('真的删除行么', function(index){
+                layer.confirm('请确实是否删除部门，删除之后无法恢复，请谨慎操作！', function(index){
                     obj.del();
                     var data=obj.data;
                     console.log(data.id);
                     layer.close(index);
                     $.ajax({
                         type : "DELETE",  //提交方式
-                        url : "/user/"+data.id,//路径
+                        url : "/department/"+data.id,//路径
                         success : function(result) {
                             console.log(result);
-                            alert("删除成功");
                         },
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             console.log(XMLHttpRequest.responseText);
@@ -120,17 +127,13 @@
 
                 });
             } else if(obj.event === 'edit'){
-                //layer.alert('编辑行：<br>'+ JSON.stringify(data))
-                localStorage.setItem("user",JSON.stringify(data));
+                localStorage.setItem("data",JSON.stringify(data));
                 layer.open({
                     type: 2,
-                    skin: 'layui-layer-rim', //加上边框
-                    area: ['520px', '425px'], //宽高
-                    content: 'form_manage_update.html',
-                    title:"修改管理员信息"
-                    //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
-
-
+                    skin: 'layui-layer-molv', //加上边框
+                    area: ['600px', '500px'], //宽高
+                    content: 'department_update.html',
+                    title:"编辑部门信息"
                 });
             }
         });
@@ -138,16 +141,15 @@
     });
 
     //增加一个支出数据
-    function addOutputInfo(){
-        layer.open({
-            type: 2,
-            skin: 'layui-layer-rim', //加上边框
-            area: ['520px', '425px'], //宽高
-            content: 'form_manage_add.html',
-            title:"添加信息"
-        });
-    }
-
+   function addOutputInfo(){
+       layer.open({
+           type: 2,
+           skin: 'layui-layer-lan', //加上边框
+           area: ['600px', '500px'], //宽高
+           content: 'department_add.html',
+           title:"添加部门"
+       });
+   }
 
 </script>
 

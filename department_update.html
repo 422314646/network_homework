@@ -4,61 +4,59 @@
     <title>修改部门信息</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="style/adminStyle.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
     <script type="text/javascript" src="./js/jquery.js"></script>
     <script type="text/javascript" src="./js/md5.js"></script>
 
 </head>
 <body>
-<div class="wrap">
-    <div class="page-title">
-        <span class="modular fl"><i class="user"></i><em>修改部门信息</em></span>
+<div class="wrap" >
+        <table class="noborder">
+            <tr>
+                <td style="text-align:right;">部门名称：</td>
+                <td><input type="text" required lay-verify="required" placeholder="请输入部门名称" class="layui-input" id="name"/></td>
+            </tr>
+            <tr>
+                <td style="text-align:right;">部门类型：</td>
+                <td>
+                    <select  class="textBox length-middle" id="type">
+                        <option value="2">市级单位</option>
+                        <option value="3">市级各辖区单位</option>
+                        <option value="4">受监管企业单位</option>
+                        <option value="5">签约技术支持/安全服务单位</option>
+                    </select>
+                </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:right;">部门地址：</td>
+                <td><input type="text" required lay-verify="required" placeholder="请输入部门地址" class="layui-input" id="address"></td>
+            </tr>
+            <tr>
+                <td style="text-align:right;">负 责 人：</td>
+                <td><input type="text" required lay-verify="required" placeholder="请输入部门负责人" class="layui-input" id="owner" /></td>
+            </tr>
+            <tr>
+                <td style="text-align:right;">联系方式：</td>
+                <td><input type="text" required lay-verify="required" placeholder="请输入部门负责人号码" class="layui-input" id="owner_contact" /></td>
+            </tr>
+            <tr>
+                <td style="text-align:right;">网安姓名：</td>
+                <td><input type="text" required lay-verify="required" placeholder="请输入部门网安姓名" class="layui-input" id="admin" /></td>
+            </tr>
+            <tr>
+                <td style="text-align:right;">联系方式：</td>
+                <td><input type="text" required lay-verify="required" placeholder="请输入部门网安联系方式" class="layui-input" id="admin_contact" /></td>
+            </tr>
+            <tr>
+                <td style="text-align:center;"></td>
+                <td>
+                    <input type="button" class="layui-btn" value="修改部门"  onclick="buttonClick_search()"/>
+                    <input type="button" class="layui-btn layui-btndanger" value="重置信息"  onclick="window.location.reload()"/>
+                </td>
+            </tr>
+        </table>
     </div>
-    <table class="noborder">
-        <tr>
-            <td style="text-align:right;">部门ID:</td>
-            <td><input type="text" class="textBox length-middle" id="id"/></td>
-        </tr>
-        <tr>
-            <td style="text-align:right;">部门名称:</td>
-            <td><input type="text" class="textBox length-middle" id="name" /></td>
-        </tr>
-        <tr>
-            <td style="text-align:right;">部门类型:</td>
-            <td><select  class="textBox length-middle" id="type">
-                <option>2:市级单位</option>
-                <option>3:市级各辖区单位</option>
-                <option>4:受监管企业单位</option>
-                <option>5:签约技术支持/安全服务单位</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align:right;">部门地址:</td>
-            <td><input type="text" class="textBox length-middle" id="address" /></td>
-        </tr>
-
-        <tr>
-            <td style="text-align:right;">部门负责人:</td>
-            <td><input type="text" class="textBox length-middle" id="owner" /></td>
-        </tr>
-        <tr>
-            <td style="text-align:right;">负责人号码:</td>
-            <td><input type="text" class="textBox length-middle" id="owner_contact" /></td>
-        </tr>
-        <tr>
-            <td style="text-align:right;">网安管理员：</td>
-            <td><input type="text" class="textBox length-middle" id="admin" /></td>
-        </tr>
-        <tr>
-            <td style="text-align:right;">网安号码：</td>
-            <td><input type="text" class="textBox length-middle" id="admin_contact" /></td>
-        </tr>
-        <tr>
-            <td style="text-align:right;"></td>
-            <td><input type="button" class="tdBtn" value="保存"  onclick="buttonClick_search()"/></td>
-        </tr>
-    </table>
-</div>
 
 <script>
     var last = JSON.parse(localStorage.getItem("data"));

@@ -6,55 +6,64 @@
     <link href="style/adminStyle.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="./js/jquery.js"></script>
     <script type="text/javascript" src="./js/md5.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
+    <script type="text/javascript" src="./layui/layui.js"></script>
+    <script type="text/javascript" src="./layui/layui.all.js"></script>
 
 </head>
 <body>
 <div class="wrap">
-    <div class="page-title">
-        <span class="modular fl"><i class="user"></i><em>修改事件信息</em></span>
-    </div>
     <table class="noborder">
-       <!-- <tr>
-            <td style="text-align:right;">事件编号:</td>
-            <td><div  class="textBox length-middle" >
-                <span id="id"></span>
-            </div></td>
-        </tr>
-    -->
         <tr id="tran_status">
-            <td style="text-align:right;" >事件状态:</td>
-            <td><select type="text" class="textBox length-middle" id="status" >
-                    <option value="1">待办</option>
-                    <option value="2">处理中</option>
-                    <option value="3">已完成</option>
-                    <option value="4">待确认</option>
-                    <option value="5">继续整改</option>
-                    <option value="6">予以处罚</option>
-                    <option value="7">予以关停</option>
-                </select>
+            <td style="text-align:right; table-layout: fixed; width: 15%;">事件状态:</td>
+            <td>
+                <div class="layui-form">
+                    <select id="status" >
+                        <option value="1">待办</option>
+                        <option value="2">处理中</option>
+                        <option value="3">已完成</option>
+                        <option value="4">待确认</option>
+                        <option value="5">继续整改</option>
+                        <option value="6">予以处罚</option>
+                        <option value="7">予以关停</option>
+                    </select>
+                </div>
             </td>
         </tr>
 
         <tr id="tran_handler">
-            <td style="text-align:right;">处理事件用户：</td>
+            <td style="text-align:right;">受理企业：</td>
             <td>
-                <select type="text" class="textBox length-middle" id="handler" >
-                </select>
+                <div class="layui-form">
+                    <select type="text" id="handler" >
+                        <option value="">请选择受理企业</option>
+                    </select>
+                </div>
             </td>
 <!--            <td><input type="text" class="textBox length-middle" id="handler" /></td>-->
         </tr>
         <tr id = "tran_comment">
             <td style="text-align:right;">备注信息：</td>
-            <td><textarea type="text" class="textBox length-middle" id="comment" ></textarea></td>
+            <td><textarea type="text" class="layui-textarea" id="comment" style="height: 200px; resize:none;" placeholder="请输入事件备注信息..."></textarea></td>
         </tr>
         <tr>
             <td style="text-align:right;"></td>
-            <td><input type="button" class="tdBtn" value="保存"  onclick="buttonClick_search()"/></td>
+            <td>
+                <input type="button" class="layui-btn" value="确认修改"  onclick="buttonClick_search()"/>
+                <input type="button" class="layui-btn layui-btn-primary" value="重置信息"  onclick="window.location.reload()"/>
+            </td>
         </tr>
     </table>
 </div>
 
 <script>
+    function renderForm() {
+        layui.use('form', function(){
+            var form = layui.form;
+            form.render();
+        });
+    }
+
     var departmentType = {};
     departmentType['2'] = '市级单位';
     departmentType['3'] = '市级各辖区单位';
@@ -66,10 +75,18 @@
         url: "/department/type",
         data: JSON.stringify({"type":[4,5]}),
         success: function (result) {
-            console.log("user", result);
+            var data1 = JSON.parse(localStorage.getItem("data1"));
+            console.log("data1", data1);
+            $('#status').find("option[value=" + data1.status + "]").attr("selected",true);
+            $('#comment').text(data1.comment);
             for (i = 0; i < result.length; i++) {
-                $("#handler").append("<option value=" + result[i].id + ">" + departmentType[result[i].type] +":" + result[i].name + "</option>");
+                if (result[i].name.indexOf(data1.handler) != -1) {
+                    $("#handler").append("<option selected value=" + result[i].id + ">" + departmentType[result[i].type] +":" + result[i].name + "</option>");
+                } else {
+                    $("#handler").append("<option value=" + result[i].id + ">" + departmentType[result[i].type] +":" + result[i].name + "</option>");
+                }
             }
+            renderForm();
         }
     })
 </script>
@@ -95,13 +112,8 @@
 <script>
     var last = JSON.parse(localStorage.getItem("data1"));
     function buttonClick_search() {
-        console.log("ddd");
-        var res = confirm("确认提交");
-        if (res == true) {
             var params = {
                 "id":parseInt(last.id),
-                // "status": parseInt(document.getElementById( "status").value),
-                // "handler": parseInt(document.getElementById( "handler").value),
                 "comment": document.getElementById("comment").value,
             };
             
@@ -124,7 +136,6 @@
                 data: JSON.stringify(params),
                 success : function(result) {
                     console.log(result);
-                    alert("修改成功");
                     parent.location.reload();
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -133,9 +144,6 @@
                     alert(j.error);
                 }
             });
-        } else {
-
-        }
     }
     var data1;
     function GetUrlParam(paraName) {

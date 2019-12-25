@@ -3,6 +3,7 @@
 <head>
     <title>添加用户和角色连接信息</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="layui/css/layui.css"  media="all">
     <link href="style/adminStyle.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="./js/jquery.js"></script>
     <script type="text/javascript" src="./js/md5.js"></script>
@@ -10,44 +11,44 @@
 </head>
 <body>
 <div class="wrap" >
-    <div class="page-title">
-        <span class="modular fl"><i class="user"></i><em>注册新管理员</em></span>
-    </div>
     <table class="noborder">
         <tr>
             <td style="text-align:right;">登录账号：</td>
-            <td><input type="text" class="textBox length-middle" id="account"/></td>
+            <td><input type="text" required lay-verify="required" placeholder="请输入用户登录账号" class="layui-input" id="account"/></td>
         </tr>
         <tr>
-            <td style="text-align:right;">名字：</td>
-            <td><input type="text" class="textBox length-middle" id="name" /></td>
+            <td style="text-align:right;">用户姓名：</td>
+            <td><input type="text" required lay-verify="required" placeholder="请输入用户姓名" class="layui-input" id="name" /></td>
         </tr>
         <tr>
             <td style="text-align:right;">手机号码：</td>
-            <td><input type="text" class="textBox length-middle" id="phone"></td>
+            <td><input type="text" required lay-verify="required" placeholder="请输入用户手机号码" class="layui-input" id="phone"></td>
         </tr>
         <tr>
             <td style="text-align:right;">邮箱地址：</td>
-            <td><input type="text" class="textBox length-middle" id="email" /></td>
+            <td><input type="text" required lay-verify="required" placeholder="请输入邮箱地址" class="layui-input" id="email" /></td>
         </tr>
         <tr>
-            <td style="text-align:right;">微信号：</td>
-            <td><input type="text" class="textBox length-middle" id="wechat" /></td>
+            <td style="text-align:right;">用户微信：</td>
+            <td><input type="text" required lay-verify="required" placeholder="请输入用户微信" class="layui-input" id="wechat" /></td>
         </tr>
         <tr>
-            <td style="text-align:right;">部门号：</td>
-            <td><select  class="textBox length-middle" id="department">
+            <td style="text-align:right;">用户部门：</td>
+            <td><select  required lay-verify="required" id="department"  class="textBox length-middle">
                 </select>
             </td>
         </tr>
 
         <tr>
-            <td style="text-align:right;">密码：</td>
-            <td><input type="password" class="textBox length-middle" id="password" /></td>
+            <td style="text-align:right;">登录密码：</td>
+            <td><input type="password" required lay-verify="required" placeholder="请输入用户登录密码" class="layui-input" id="password" /></td>
         </tr>
         <tr>
             <td style="text-align:right;"></td>
-            <td><input type="button" class="tdBtn" value="保存"  onclick="buttonClick_search()"/></td>
+            <td>
+                <input type="button" class="layui-btn" value="添加用户"  onclick="buttonClick_search()"/>
+                <input type="button" class="layui-btn layui-btndanger" value="重置信息"  onclick="window.location.reload()"/>
+            </td>
         </tr>
     </table>
 </div>
@@ -77,8 +78,6 @@
 
 <script>
     function buttonClick_search(){
-        var res = confirm("确认提交");
-        if(res == true){
             var params = {
                 "account": document.getElementById( "account").value,
                 "name": document.getElementById( "name").value,
@@ -104,8 +103,6 @@
                         alert(j.error);
                     }
                 });
-        }else{
-        }
     }
 
 </script>
