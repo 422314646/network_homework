@@ -21,13 +21,13 @@
     <script src="layui/layui.js" charset="utf-8"></script>
 </head>
 <body>
-<table class="layui-hide" id="test" lay-filter="demo"></table>
-<div style="display: none;"id="userTool">
+<!-- <div style="display: none;"id="userTool"> -->
+<div id="userTool" style="margin-top: 10px; margin-left: 10px;">
     <div>
         <button class="layui-btn" id="trans_search" onclick="trans_query()" >查询</button>
         <button class="layui-btn layui-btn-normal" type="button" onclick="addOutputInfo()" id="add" >添加事务</button>
-<!--        <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>-->
-        <div style="width: 100px;float: left !important;">
+        <button class="layui-btn layui-btn-normal" type="button" onclick="location.reload()">刷新</button>
+        <div style="width: 100px;float: left !important;" class="layui-form">
             <select id="trans-status" lay-search>
                 <option value="">事务状态</option>
                 <option value="1">待办</option>
@@ -39,14 +39,14 @@
                 <option value="7">予以关停</option>
             </select>
         </div>
-        <div style="width: 100px;float: left !important;">
+        <div style="width: 100px;float: left !important;" class="layui-form">
             <select id="trans-type" lay-search>
                 <option value="">事务类型</option>
                 <option value="1">安全事件通报</option>
                 <option value="2">热点事件发布</option>
             </select>
         </div>
-        <div style="width: 100px;float: left !important;">
+        <div style="width: 100px;float: left !important;" class="layui-form">
             <select id="event-type" lay-search>
                 <option value="">事件类型</option>
                 <option value="1">违处信息</option>
@@ -56,12 +56,12 @@
                 <option value="5">安全威胁/漏洞</option>
             </select>
         </div>
-        <div style="width: 100px;float: left !important;">
+        <div style="width: 100px;float: left !important;" class="layui-form">
             <select id="trans_handler_department" style="width: 100px;float: left !important;" lay-search>
                 <option value="">辖区选择</option>
             </select>
         </div>
-        <div style="width: 100px;float: left !important;">
+        <div style="width: 100px;float: left !important;" class="layui-form">
             <!-- <input type="text" placeholder="企业名称" autocomplete="off" class="layui-input" id="trans-handler"> -->
             <select id="trans_handler" style="width: 100px;float: left !important;" lay-search>
                     <option value="">企业选择</option>
@@ -69,12 +69,12 @@
         </div>
         <div class="layui-inline" style="float: left">
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="test1" placeholder="起始时间">
+                <input type="text" class="layui-input" id="start_time" placeholder="起始时间" autocomplete="off">
             </div>
         </div>
         <div class="layui-inline" style="float: left">
             <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="test2" placeholder="截至时间">
+                <input type="text" class="layui-input" id="end_time" placeholder="截至时间" autocomplete="off">
             </div>
         </div>
 
@@ -86,6 +86,7 @@
 <!--        </div>-->
     </div>
 </div>
+<table class="layui-hide" id="test" lay-filter="demo"></table>
 </body>
 
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
@@ -139,7 +140,7 @@
             elem: '#test'
             ,url:'/transaction'
             ,method:"get"
-            ,toolbar: "#userTool"
+            // ,toolbar: "#userTool"
             ,title: '部门数据表'
             ,page:true
             ,limit:20
@@ -196,8 +197,8 @@
     layui.use('laydate', function(){
         var laydate = layui.laydate;
         laydate.render({
-             elem: '#test1'
-            ,done: function(value, date, endDate){
+             elem: "#start_time"
+             ,done: function(value, date, endDate){
                  startTime = value;
             }
         });
@@ -206,7 +207,7 @@
     layui.use('laydate', function(){
         var laydate = layui.laydate;
         laydate.render({
-            elem: '#test2'
+            elem: "#end_time"
             ,done: function(value, date, endDate){
                 endTime = value;
             }
@@ -239,7 +240,7 @@
             params['handler'] = parseInt(handler);
         }
         if (startTime.length > 0 && endTime.length > 0) {
-            params['start'] = startTime;
+            params['begin'] = startTime;
             params['end'] = endTime;
         }
         console.log(params);
